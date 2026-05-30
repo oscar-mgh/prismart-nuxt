@@ -79,9 +79,22 @@ onBeforeUnmount(() => {
 
     <div
       v-else
-      class="flex h-64 items-center justify-center rounded-3xl border-2 border-dashed border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900/50"
+      class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-neutral-200 bg-neutral-200/30 dark:bg-neutral-800/30 px-4 py-20 text-center dark:border-neutral-800"
     >
+    <UIcon
+        name="i-lucide-heart"
+        class="mb-6 h-12 w-12 text-2xl text-neutral-300 dark:text-neutral-700"
+      />
       <p class="text-neutral-500">Aún no tienes productos favoritos.</p>
+
+      <UButton
+        to="/products"
+        color="primary"
+        size="lg"
+        class="mt-6 rounded-xl px-8 font-semibold"
+      >
+        Explorar productos
+      </UButton>
     </div>
   </div>
 </template>

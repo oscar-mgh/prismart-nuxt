@@ -219,11 +219,11 @@ onBeforeUnmount(() => {
 
     <div
       v-else-if="isEmpty"
-      class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-neutral-200 bg-neutral-900/50 px-4 py-20 text-center dark:border-neutral-800"
+      class="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-neutral-200 bg-neutral-200/30 dark:bg-neutral-800/30 px-4 py-20 text-center dark:border-neutral-800"
     >
       <UIcon
         name="i-lucide-shopping-bag"
-        class="mb-6 h-14 w-14 text-neutral-300 dark:text-neutral-700"
+        class="mb-6 h-14 w-14 text-2xl text-neutral-300 dark:text-neutral-700"
       />
       <h2 class="text-lg font-bold text-neutral-900 dark:text-white sm:text-xl">
         Aún no tienes pedidos

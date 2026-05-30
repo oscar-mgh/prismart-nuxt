@@ -146,17 +146,17 @@ const { data: bestsellingProducts } = await useAsyncData("bestselling", () =>
         class="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-8"
       >
         <div
-          class="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800 text-blue-500 text-xl"
+          class="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sky-500 text-xl"
         >
-          <UIcon name="i-lucide-refresh-cw" class="h-6 w-6" />
+          <UIcon name="i-lucide-sparkles" class="h-6 w-6" />
         </div>
         <h3 class="text-lg font-bold text-neutral-900 dark:text-white">
-          Devoluciones
+          Club de Beneficios
         </h3>
         <p
           class="mt-2 text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed"
         >
-          ¿No te gusta? Devuélvelo gratis en los primeros 30 días.
+          Acumula puntos en cada compra y canjéalos por descuentos exclusivos. ¡Tu fidelidad tiene premio!
         </p>
       </div>
     </section>

@@ -147,7 +147,7 @@ await loadConversations();
 
     <div
       v-else-if="!conversations.length"
-      class="flex min-h-96 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50 px-6 text-center dark:border-neutral-800 dark:bg-neutral-900/50"
+      class="flex min-h-96 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-200/30 dark:bg-neutral-800/30 px-6 text-center dark:border-neutral-800"
     >
       <UIcon
         name="i-lucide-message-circle"
