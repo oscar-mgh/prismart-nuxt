@@ -2,11 +2,11 @@
 @import "@nuxt/ui";
 
 * {
-  font-family: 'Quicksand', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
 }
 
 h1, h2, h3 {
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
   letter-spacing: -0.01em; 
 }
@@ -14,7 +14,7 @@ h1, h2, h3 {
 @theme {
   --ui-radius: 1.5rem;
 
-  --font-sans: "Inter", "Quicksand", system-ui, sans-serif;
+  --font-sans: "Inter", "Inter", system-ui, sans-serif;
 }
 
 ::-webkit-scrollbar {
