@@ -6,10 +6,28 @@ definePageMeta({
 const { fetchApi } = useApi();
 const toast = useToast();
 const authStore = useAuthStore();
+const packageStore = usePackageStore();
 
 const orders = ref<Order[]>([]);
 const loading = ref(false);
 const processing = ref<Set<string>>(new Set());
+
+const statusOrder: Record<Order["status"], number> = {
+  PAID: 0,
+  SHIPPED: 1,
+  REFUNDED: 2,
+  DELIVERED: 3,
+  PENDING: 4,
+  CANCELLED: 5,
+};
+
+const sortedOrders = computed(() =>
+  [...orders.value].sort(
+    (a, b) =>
+      statusOrder[a.status] - statusOrder[b.status] ||
+      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+  ),
+);
 
 if (authStore.user?.role !== "DELIVERY_AGENT") {
   navigateTo("/");
@@ -20,6 +38,7 @@ const fetchOrders = async () => {
   try {
     const response = await fetchApi<Order[]>("/orders/assigned/me");
     orders.value = response || [];
+    packageStore.syncFromOrders(orders.value);
   } catch (err) {
     toast.add({
       title: "Error al cargar las órdenes",
@@ -80,6 +99,7 @@ const markAsShipped = async (orderId: string) => {
 
     const order = orders.value.find((o) => o.id === orderId);
     if (order) order.status = "SHIPPED";
+    packageStore.syncFromOrders(orders.value);
 
     toast.add({
       title: "Orden marcada como enviada",
@@ -160,7 +180,7 @@ const markAsDelivered = async (orderId: string) => {
 
     <div v-else class="space-y-8">
       <div
-        v-for="order in orders"
+        v-for="order in sortedOrders"
         :key="order.id"
         class="overflow-hidden shadow-lg rounded-2xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
       >

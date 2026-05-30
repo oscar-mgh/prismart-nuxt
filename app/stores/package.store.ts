@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import type { Order } from "~~/shared/types";
 
 export const usePackageStore = defineStore("package", () => {
   const pendingCount = ref(0);
@@ -7,18 +8,23 @@ export const usePackageStore = defineStore("package", () => {
 
   const fetchPendingCount = async () => {
     try {
-      const orders = await fetchApi<any[]>("/orders/assigned/me");
-      const pendingOrders = orders.filter((order) => order.status === "PAID");
-      pendingCount.value = pendingOrders.length;
+      const orders = await fetchApi<Order[]>("/orders/assigned/me");
+      syncFromOrders(orders);
     } catch (error) {
       console.error("Error al obtener el conteo de paquetes:", error);
       pendingCount.value = 0;
     }
   };
 
+  const syncFromOrders = (orders: Order[] = []) => {
+    pendingCount.value = orders.filter(
+      (order) => order.status === "PAID",
+    ).length;
+  };
+
   const clear = () => {
     pendingCount.value = 0;
   };
 
-  return { pendingCount, fetchPendingCount, clear };
+  return { pendingCount, fetchPendingCount, syncFromOrders, clear };
 });
