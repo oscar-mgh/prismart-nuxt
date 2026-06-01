@@ -193,6 +193,7 @@ watch(
 onMounted(() => {
   if (route.query.payment === "success") {
     paymentRefreshAttempts = 0;
+    notificationStore.scheduleNotificationSync();
     schedulePaymentRefresh();
   }
 });

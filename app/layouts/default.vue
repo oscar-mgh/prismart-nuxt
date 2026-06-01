@@ -110,11 +110,11 @@ const navigateAndClose = (path: string) => {
       class="sticky top-0 z-50 border-b border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
     >
       <nav
-        class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
+        class="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 sm:grid-cols-[minmax(0,1fr)_minmax(18rem,36rem)_minmax(0,1fr)] sm:px-6 lg:px-8"
       >
         <NuxtLink
           to="/"
-          class="flex shrink-0 items-center gap-2 font-bold text-neutral-900 dark:text-white"
+          class="flex shrink-0 items-center gap-2 justify-self-start font-bold text-neutral-900 dark:text-white"
         >
           <img
             src="~/assets/prismart_logo.svg"
@@ -126,7 +126,7 @@ const navigateAndClose = (path: string) => {
 
         <button
           @click="toggleMobileMenu"
-          class="ml-2 inline-flex items-center justify-center rounded-md p-2 text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 md:hidden"
+          class="ml-2 inline-flex items-center justify-center justify-self-end rounded-md p-2 text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 sm:hidden"
           aria-label="Abrir menú"
         >
           <UIcon
@@ -135,7 +135,7 @@ const navigateAndClose = (path: string) => {
           />
         </button>
 
-        <div class="hidden sm:flex max-w-xl flex-1">
+        <div class="hidden w-full max-w-xl justify-self-center sm:flex">
           <div
             class="flex w-full overflow-hidden rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800"
           >
@@ -161,7 +161,7 @@ const navigateAndClose = (path: string) => {
           </div>
         </div>
 
-        <div class="hidden sm:flex shrink-0 items-center gap-1.5">
+        <div class="hidden shrink-0 items-center gap-1.5 justify-self-end sm:flex">
           <ClientOnly>
             <NuxtLink
               v-if="authStore.isAuthenticated"
@@ -191,13 +191,9 @@ const navigateAndClose = (path: string) => {
                 </span>
               </transition>
             </NuxtLink>
-          </ClientOnly>
 
-          <ClientOnly>
             <NotificationSystem v-if="authStore.isAuthenticated" />
-          </ClientOnly>
 
-          <ClientOnly>
             <NuxtLink
               v-if="
                 authStore.isAuthenticated &&
@@ -233,10 +229,36 @@ const navigateAndClose = (path: string) => {
                 </span>
               </transition>
             </NuxtLink>
-          </ClientOnly>
 
-          <ClientOnly>
-            <div ref="dropdownRef" class="relative">
+            <div
+              v-if="!authStore.isAuthenticated"
+              class="flex items-center gap-1.5"
+            >
+              <UTooltip text="Iniciar sesión">
+                <UButton
+                  to="/login"
+                  color="neutral"
+                  variant="soft"
+                  size="xl"
+                  icon="i-lucide-log-in"
+                  class="cursor-pointer rounded-full p-2.25 mr-1"
+                  aria-label="Iniciar sesión"
+                />
+              </UTooltip>
+              <UTooltip text="Registrarse">
+                <UButton
+                  to="/register"
+                  color="neutral"
+                  variant="soft"
+                  size="xl"
+                  icon="i-lucide-user-plus"
+                  class="cursor-pointer rounded-full p-2.25"
+                  aria-label="Registrarse"
+                />
+              </UTooltip>
+            </div>
+
+            <div v-else ref="dropdownRef" class="relative">
               <button
                 class="flex cursor-pointer items-center justify-center rounded-full transition-opacity hover:opacity-80 focus:outline-none"
                 @click="dropdownOpen = !dropdownOpen"
@@ -444,31 +466,6 @@ const navigateAndClose = (path: string) => {
                           class="h-4 w-4 shrink-0"
                         />
                         Cerrar Sesión
-                      </button>
-                    </div>
-                  </template>
-
-                  <template v-else>
-                    <div class="p-1.5">
-                      <button
-                        class="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
-                        @click="navigateAndClose('/login')"
-                      >
-                        <UIcon
-                          name="i-lucide-log-in"
-                          class="h-4 w-4 shrink-0 text-neutral-400"
-                        />
-                        Iniciar Sesión
-                      </button>
-                      <button
-                        class="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
-                        @click="navigateAndClose('/register')"
-                      >
-                        <UIcon
-                          name="i-lucide-user-plus"
-                          class="h-4 w-4 shrink-0 text-neutral-400"
-                        />
-                        Registrarse
                       </button>
                     </div>
                   </template>

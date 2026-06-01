@@ -22,6 +22,7 @@ export const useNotificationStore = defineStore("notifications", () => {
   const isModalOpen = ref(false);
 
   let socket: Socket | null = null;
+  let syncTimeout: ReturnType<typeof setTimeout> | null = null;
 
   const unreadCount = computed(
     () => notifications.value.filter((n) => !n.isRead).length,
@@ -45,6 +46,38 @@ export const useNotificationStore = defineStore("notifications", () => {
     } finally {
       loading.value = false;
     }
+  };
+
+  const clearScheduledSync = () => {
+    if (!syncTimeout) return;
+    clearTimeout(syncTimeout);
+    syncTimeout = null;
+  };
+
+  const scheduleNotificationSync = (
+    options: { attempts?: number; intervalMs?: number } = {},
+  ) => {
+    if (import.meta.server) return;
+
+    const maxAttempts = options.attempts ?? 6;
+    const intervalMs = options.intervalMs ?? 1000;
+    let currentAttempt = 0;
+
+    clearScheduledSync();
+
+    const sync = async () => {
+      currentAttempt += 1;
+      await fetchNotifications();
+
+      if (currentAttempt >= maxAttempts || !authStore.isAuthenticated) {
+        syncTimeout = null;
+        return;
+      }
+
+      syncTimeout = setTimeout(sync, intervalMs);
+    };
+
+    void sync();
   };
 
   const markAsRead = async (notification: AppNotification) => {
@@ -147,6 +180,8 @@ export const useNotificationStore = defineStore("notifications", () => {
   };
 
   const disconnectSocket = () => {
+    clearScheduledSync();
+
     if (socket) {
       socket.off("connect");
       socket.off("notification.created");
@@ -166,6 +201,7 @@ export const useNotificationStore = defineStore("notifications", () => {
     isPanelOpen,
     isModalOpen,
     fetchNotifications,
+    scheduleNotificationSync,
     markAsRead,
     deleteOne,
     deleteAll,

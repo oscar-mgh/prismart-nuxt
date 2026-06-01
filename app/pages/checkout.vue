@@ -57,6 +57,7 @@ declare global {
 const { fetchApi } = useApi();
 const toast = useToast();
 const cartStore = useCartStore();
+const notificationStore = useNotificationStore();
 const config = useRuntimeConfig();
 const { getShippingCost } = useCartShipping();
 
@@ -64,6 +65,8 @@ const cart = ref<Cart | null>(null);
 const addresses = ref<UserAddress[]>([]);
 const selectedAddressIndex = ref<number | null>(null);
 const loading = ref(false);
+const cartLoaded = ref(false);
+const cartLoadFailed = ref(false);
 const loadingAddresses = ref(false);
 const addingAddress = ref(false);
 const deletingAddressIndex = ref<number | null>(null);
@@ -160,7 +163,9 @@ const selectedAddress = computed(() =>
     ? null
     : addresses.value[selectedAddressIndex.value],
 );
-const isEmpty = computed(() => !cart.value?.items?.length);
+const isEmpty = computed(
+  () => cartLoaded.value && !cartLoadFailed.value && !cart.value?.items.length,
+);
 
 const displaySubtotal = computed(
   () => paymentSummary.value?.subtotal ?? subtotalFinal.value,
@@ -180,6 +185,7 @@ const formatPrice = (n: number) =>
 
 const fetchCart = async () => {
   loading.value = true;
+  cartLoadFailed.value = false;
 
   try {
     const response = await fetchApi<Cart>("/cart");
@@ -189,6 +195,8 @@ const fetchCart = async () => {
     };
     cartStore.syncFromCart(response);
   } catch {
+    cart.value = null;
+    cartLoadFailed.value = true;
     toast.add({
       title: "Error al cargar el carrito",
       description: "No se pudo obtener tu carrito. Intenta de nuevo.",
@@ -197,6 +205,7 @@ const fetchCart = async () => {
       duration: 3500,
     });
   } finally {
+    cartLoaded.value = true;
     loading.value = false;
   }
 };
@@ -489,6 +498,7 @@ const processPayment = async () => {
     });
 
     cartStore.clear();
+    notificationStore.scheduleNotificationSync();
     await navigateTo("/my-orders?payment=success");
   } catch (err: unknown) {
     const msg = getApiErrorMessage(
@@ -548,6 +558,32 @@ onBeforeUnmount(() => {
         <USkeleton class="h-72 w-full rounded-2xl" />
       </div>
       <USkeleton class="h-96 w-full rounded-2xl" />
+    </div>
+
+    <div
+      v-else-if="cartLoadFailed"
+      class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50 px-6 py-24 text-center dark:border-neutral-800 dark:bg-neutral-900/50"
+    >
+      <UIcon
+        name="i-lucide-refresh-cw"
+        class="mb-6 h-16 w-16 text-3xl text-neutral-300 dark:text-neutral-700"
+      />
+      <h2 class="text-xl font-bold text-neutral-900 dark:text-white">
+        No pudimos cargar tu carrito
+      </h2>
+      <p class="mt-2 max-w-md text-sm text-neutral-500 dark:text-neutral-400">
+        Intenta de nuevo para continuar con el checkout sin perder tu lugar.
+      </p>
+      <UButton
+        color="primary"
+        size="lg"
+        icon="i-lucide-refresh-cw"
+        class="mt-8 rounded-xl"
+        :loading="loading"
+        @click="fetchCart"
+      >
+        Reintentar
+      </UButton>
     </div>
 
     <div
