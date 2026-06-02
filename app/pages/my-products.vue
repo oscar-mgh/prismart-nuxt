@@ -308,7 +308,7 @@ const formatPrice = (n: number) =>
         <div class="flex items-center gap-3">
           <UButton
             v-if="productsData?.data?.length"
-            :color="selectionMode ? 'primary' : 'neutral'"
+            :color="selectionMode ? 'error' : 'neutral'"
             :variant="selectionMode ? 'solid' : 'subtle'"
             size="md"
             :icon="selectionMode ? 'i-lucide-check-square' : 'i-lucide-square'"
@@ -515,9 +515,9 @@ const formatPrice = (n: number) =>
                 class="flex items-center justify-between gap-1.5 rounded-lg border border-red-100 bg-red-50 p-1.5 dark:border-red-900/30 dark:bg-red-950/20"
               >
                 <span
-                  class="ml-1 text-[10px] font-bold uppercase text-red-600 dark:text-red-400"
+                  class="ml-1 text-[11px] font-bold text-red-600 dark:text-red-400"
                 >
-                  ¿Borrar?
+                  ¿Confirmar eliminación?
                 </span>
                 <div class="flex gap-1">
                   <UButton
@@ -705,7 +705,7 @@ const formatPrice = (n: number) =>
               >Quitar</UButton
             >
             <UButton
-              color="neutral"
+              color="error"
               variant="subtle"
               size="sm"
               class="cursor-pointer rounded-lg"
@@ -771,7 +771,7 @@ const formatPrice = (n: number) =>
 
           <div class="mt-5 flex justify-end gap-2">
             <UButton
-              color="neutral"
+              color="error"
               variant="subtle"
               size="sm"
               class="cursor-pointer rounded-lg"
@@ -924,7 +924,7 @@ const formatPrice = (n: number) =>
 
             <div class="flex justify-end gap-2 pt-2">
               <UButton
-                color="neutral"
+                color="error"
                 variant="subtle"
                 size="md"
                 class="cursor-pointer rounded-xl"
