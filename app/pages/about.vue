@@ -8,7 +8,7 @@ definePageMeta({
   <div class="mx-auto max-w-4xl py-12">
     <UCard class="rounded-3xl border-none shadow-xl dark:bg-neutral-900">
       <div class="p-8 md:p-12">
-        <h1 class="text-4xl font-black text-secondary-600 dark:text-secondary-400">Sobre Prismart</h1>
+        <h1 class="text-4xl font-black text-primary-600 dark:text-primary-400">Sobre Prismart</h1>
         <p class="mt-6 text-lg text-neutral-600 dark:text-neutral-300">
           Prismart nació con una visión clara: revolucionar la manera en que compradores y vendedores 
           interactúan en el mundo del comercio electrónico.
