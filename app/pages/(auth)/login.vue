@@ -6,6 +6,8 @@ const authStore = useAuthStore();
 const { fetchApi } = useApi();
 const loading = ref(false);
 
+const toast = useToast();
+
 const schema = z.object({
   email: z.string().email("Correo electrónico inválido"),
   password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
@@ -30,6 +32,48 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     window.location.href = "/";
   } catch (error: any) {
     console.error("Login error:", error);
+
+    const statusCode =
+      error?.statusCode || error?.response?.status || error?.data?.statusCode;
+    const messagePayload = error?.data?.message;
+
+    if (statusCode === 401) {
+      const hasMessage = (text: string) => {
+        if (Array.isArray(messagePayload)) {
+          return messagePayload.includes(text);
+        }
+        return messagePayload === text;
+      };
+
+      if (hasMessage("User account is disabled")) {
+        toast.add({
+          title: "Acceso denegado",
+          description:
+            "El usuario no tiene acceso, contacta con el administrador.",
+          color: "error",
+          icon: "i-lucide-shield-alert",
+        });
+      } else if (hasMessage("Invalid credentials")) {
+        toast.add({
+          title: "Error de autenticación",
+          description: "Correo electrónico o contraseña incorrectos.",
+          color: "warning",
+          icon: "i-lucide-lock-keyhole",
+        });
+      } else {
+        toast.add({
+          title: "Error de autorización",
+          description: "No autorizado para realizar esta acción.",
+          color: "error",
+        });
+      }
+    } else {
+      toast.add({
+        title: "Error del servidor",
+        description: "Ocurrió un problema inesperado. Inténtalo más tarde.",
+        color: "error",
+      });
+    }
   } finally {
     loading.value = false;
   }
