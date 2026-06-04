@@ -232,7 +232,7 @@ const navigateAndClose = (path: string) => {
 
             <div
               v-if="!authStore.isAuthenticated"
-              class="flex items-center gap-1.5"
+              class="flex items-center gap-2.25"
             >
               <UTooltip text="Iniciar sesión">
                 <UButton
@@ -241,7 +241,7 @@ const navigateAndClose = (path: string) => {
                   variant="soft"
                   size="xl"
                   icon="i-lucide-log-in"
-                  class="cursor-pointer rounded-full p-2.25 mr-1"
+                  class="cursor-pointer rounded-full p-2.25"
                   aria-label="Iniciar sesión"
                 />
               </UTooltip>
@@ -254,6 +254,18 @@ const navigateAndClose = (path: string) => {
                   icon="i-lucide-user-plus"
                   class="cursor-pointer rounded-full p-2.25"
                   aria-label="Registrarse"
+                />
+              </UTooltip>
+
+              <UTooltip text="Cambiar tema">
+                <UButton
+                  color="neutral"
+                  variant="soft"
+                  size="xl"
+                  :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
+                  class="cursor-pointer rounded-full p-2.25"
+                  @click="isDark = !isDark"
+                  aria-label="Cambiar tema"
                 />
               </UTooltip>
             </div>
